@@ -68,9 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Body Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ce9a6c9017a8b2441b3cb67c3d5379a5, type: 2}
-  m_sharedMaterial: {fileID: -8226070728644797412, guid: ce9a6c9017a8b2441b3cb67c3d5379a5,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -105,6 +104,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 1.2
   m_lineSpacingMax: 0
@@ -271,7 +271,6 @@ GameObject:
   - component: {fileID: 7924678828053803935}
   - component: {fileID: 8018450142528476607}
   - component: {fileID: 8627560808085175803}
-  - component: {fileID: 4820762347598640417}
   m_Layer: 0
   m_Name: Panel
   m_TagString: Untagged
@@ -337,22 +336,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4820762347598640417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1199873384995208192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12638dfe8ea9fc74a89cf45cf3a9528f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BillboardToCamera
-  targetCamera: {fileID: 0}
-  lockVertical: 0
-  allowVerticalTilt: 1
-  maxVerticalAngle: 30
 --- !u!1 &2583045535532662603
 GameObject:
   m_ObjectHideFlags: 0
@@ -647,10 +630,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6189366991651358}
-  - component: {fileID: 1201125033304295864}
-  - component: {fileID: 7142352851543370155}
   - component: {fileID: 8313645535255138849}
-  - component: {fileID: 5181382644631700489}
   m_Layer: 0
   m_Name: POIInfoCard
   m_TagString: Untagged
@@ -674,37 +654,6 @@ Transform:
   - {fileID: 3707310298120867789}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1201125033304295864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6012818824791284970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 483bc610f86578a4a9580723de6a9b98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::POIInfoCardView
-  titleText: {fileID: 2461320702133654163}
-  bodyText: {fileID: 3661636444583811694}
-  galleryImage: {fileID: 7035621561850058709}
-  audioSource: {fileID: 0}
-  secondsPerSlide: 2.5
-  autoplay: 1
---- !u!114 &7142352851543370155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6012818824791284970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f02015acf594ee24482e89ee4469af29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::POICardTapOpener
-  poi: {fileID: 0}
 --- !u!65 &8313645535255138849
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -726,21 +675,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5181382644631700489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6012818824791284970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11455ac79a74b494186a4423947f4247, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpawnUIPrefabOnTap
-  uiPrefab: {fileID: 4024947953444953422, guid: b6ac97c1c2c4eb242a8b14e3970f5e10,
-    type: 3}
-  poi: {fileID: 0}
 --- !u!1 &6531502121962639639
 GameObject:
   m_ObjectHideFlags: 0
@@ -809,9 +743,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Title Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e18273a62884a584995a6dcc83e23ff4, type: 2}
-  m_sharedMaterial: {fileID: 3113837539181463087, guid: e18273a62884a584995a6dcc83e23ff4,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -846,6 +779,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1052,7 +986,6 @@ GameObject:
   - component: {fileID: 2938322153059480057}
   - component: {fileID: 7035621561850058709}
   - component: {fileID: 3512048978753725331}
-  - component: {fileID: 7116594565326138557}
   m_Layer: 0
   m_Name: Images
   m_TagString: Untagged
@@ -1137,19 +1070,3 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &7116594565326138557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7462852485423930109}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e8e4ff665e409345ae21cf0a34a2107, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::POISlideshow
-  galleryImage: {fileID: 7035621561850058709}
-  autoplay: 1
-  secondsPerSlide: 2.5
-  loop: 1
