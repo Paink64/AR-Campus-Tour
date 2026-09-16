@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ARView.unity
     guid: 619b6571ea739064bbd1be028b09f73f
+  - enabled: 0
+    path: Assets/Samples/ARCore Extensions/1.54.0/Persistent Cloud Anchor Sample/Scenes/PersistentCloudAnchorsArf6.unity
+    guid: 66d0e6a840eec4f7daf83c2f16433cee
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6ee72d15cf39dd748a13eac57397b9af, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 0465d33c6aee55f44b0237db8b0e0259, type: 2}
