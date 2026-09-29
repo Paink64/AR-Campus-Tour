@@ -10,19 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 66d656a49148355419904cbd22f16e6d, type: 3}
-  m_Name: Test
+  m_Name: Pool
   m_EditorClassIdentifier: 
-  title: Test 1
-  description: 'The 1st Location
-
-'
+  title: Pool Corner
+  description: This is the Corner of the pool!
   gallery:
   - {fileID: 21300000, guid: 92b51f2c175bb3144a3baa0e2f3cefdb, type: 3}
   - {fileID: 21300000, guid: a34d0f09363a0e54aabcc455d67712a3, type: 3}
   - {fileID: 21300000, guid: b4873fc2957aaf64ba639a16c6af09ec, type: 3}
+  - {fileID: 21300000, guid: bf33c5fe195d66c4e9eccb06d3e4ee31, type: 3}
+  - {fileID: 21300000, guid: 79ff219cf1e6e0541806b8f753b57a33, type: 3}
   audioGuide: {fileID: 8300000, guid: 7886a63092c101f47be13426634593ae, type: 3}
   latitude: 0
   longitude: 0
   triggerRadiusMeters: 30
-  cloudAnchorId: 
-  ttlDays: 365
+  cloudAnchorId: ua-0a7beec5594ece46ac71630c7337929d

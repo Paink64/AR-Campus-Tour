@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 66d656a49148355419904cbd22f16e6d, type: 3}
-  m_Name: Test2
+  m_Name: Frog
   m_EditorClassIdentifier: 
-  title: Test 2
-  description: This is the 2nd Location
+  title: Frog?
+  description: There's a frog on the wall!!!
   gallery:
-  - {fileID: 21300000, guid: cfafc0b2a7dc2174f8c97af8627535b4, type: 3}
-  - {fileID: 21300000, guid: 3ea5aab3953406b47b119bfddc925106, type: 3}
-  - {fileID: 21300000, guid: a7bfa55693622484883727038fa5cae0, type: 3}
+  - {fileID: 21300000, guid: 2d7ec992ae345b145a1c640d35a41fc6, type: 3}
+  - {fileID: 21300000, guid: ded3ebb4f376a914f8d0ec2bbd24a0b0, type: 3}
+  - {fileID: 21300000, guid: ee70dd36840514745bf2ba623e762fb1, type: 3}
+  - {fileID: 21300000, guid: 7281835b670e97e4c9d8a38936a8f8ac, type: 3}
+  - {fileID: 21300000, guid: 35679d0b7f5085040ac8670571da3f82, type: 3}
   audioGuide: {fileID: 8300000, guid: d4604dcf00713a947a0e50baf695673b, type: 3}
   latitude: 0
   longitude: 0
   triggerRadiusMeters: 30
-  cloudAnchorId: 
-  ttlDays: 365
+  cloudAnchorId: ua-f98fd90717e0c90939ba0b813d14d3d8
