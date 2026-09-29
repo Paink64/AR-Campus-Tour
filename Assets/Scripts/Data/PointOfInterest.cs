@@ -26,7 +26,4 @@ public class PointOfInterest : ScriptableObject
     [Header("Cloud Anchor")]
     [Tooltip("Set this after hosting Anchor")]
     public string cloudAnchorId;
-
-    [Tooltip("How long the anchor should live when hosting (days)")]
-    public int ttlDays = 365;
 }

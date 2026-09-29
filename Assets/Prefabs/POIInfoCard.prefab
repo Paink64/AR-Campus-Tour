@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Body Text
+  m_text: Body Text Sample
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -648,6 +648,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6189366991651358}
   - component: {fileID: 8313645535255138849}
+  - component: {fileID: 7655382933597810325}
   m_Layer: 0
   m_Name: POIInfoCard
   m_TagString: Untagged
@@ -692,6 +693,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7655382933597810325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6012818824791284970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8701597f83f2b7340b79b1367e878329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  titleText: {fileID: 2461320702133654163}
+  bodyText: {fileID: 3661636444583811694}
+  galleryImage: {fileID: 7035621561850058709}
+  audioSource: {fileID: 0}
+  secondsPerSlide: 2.5
+  autoplay: 1
 --- !u!1 &6531502121962639639
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,7 +777,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Title Text
+  m_text: 'Title Text '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

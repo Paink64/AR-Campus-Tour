@@ -46,6 +46,11 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
         public GameObject CloudAnchorPrefab;
 
         /// <summary>
+        /// Prefab used when placing an anchor for HOSTING.
+        /// </summary>
+        public GameObject HostingAnchorPrefab;
+
+        /// <summary>
         /// The game object that includes <see cref="MapQualityIndicator"/> to visualize
         /// map quality result.
         /// </summary>
@@ -211,6 +216,10 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
 
         private Color _activeColor;
         private AndroidJavaClass _versionInfo;
+
+        private GameObject _spawnedPoiVisual = null;
+        private GameObject _lastResolvedAnchorGO = null;
+
 
         /// <summary>
         /// Get the camera pose for the current frame.
@@ -423,7 +432,6 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
             Controller.RaycastManager.Raycast(
                 touchPos, hitResults, TrackableType.PlaneWithinPolygon);
 
-            // If there was an anchor placed, then instantiate the corresponding object.
             var planeType = PlaneAlignment.HorizontalUp;
             if (hitResults.Count > 0)
             {
@@ -439,8 +447,6 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
                 var hitPose = hitResults[0].pose;
                 if (Application.platform == RuntimePlatform.IPhonePlayer)
                 {
-                    // Point the hitPose rotation roughly away from the raycast/camera
-                    // to match ARCore.
                     hitPose.rotation.eulerAngles =
                         new Vector3(0.0f, Controller.MainCamera.transform.eulerAngles.y, 0.0f);
                 }
@@ -450,11 +456,12 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
 
             if (_anchor != null)
             {
-                Instantiate(CloudAnchorPrefab, _anchor.transform);
+                // ✅ Use Hosting prefab when placing for hosting
+                var prefabToSpawn = HostingAnchorPrefab != null ? HostingAnchorPrefab : CloudAnchorPrefab;
+                Instantiate(prefabToSpawn, _anchor.transform);
 
                 // Attach map quality indicator to this anchor.
-                var indicatorGO =
-                    Instantiate(MapQualityIndicatorPrefab, _anchor.transform);
+                var indicatorGO = Instantiate(MapQualityIndicatorPrefab, _anchor.transform);
                 _qualityIndicator = indicatorGO.GetComponent<MapQualityIndicator>();
                 _qualityIndicator.DrawIndicator(planeType, Controller.MainCamera);
 
@@ -462,10 +469,10 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
                     "capture it from different angles";
                 DebugText.text = "Waiting for sufficient mapping quaility...";
 
-                // Hide plane generator so users can focus on the object they placed.
                 UpdatePlaneVisibility(false);
             }
         }
+
 
         private void HostingCloudAnchor()
         {
@@ -526,7 +533,7 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
 
             // Creating a Cloud Anchor with lifetime = 1 day.
             // This is configurable up to 365 days when keyless authentication is used.
-            var promise = Controller.AnchorManager.HostCloudAnchorAsync(_anchor, 1);
+            var promise = Controller.AnchorManager.HostCloudAnchorAsync(_anchor, 365);
             if (promise.State == PromiseState.Done)
             {
                 Debug.LogFormat("Failed to host a Cloud Anchor.");
@@ -559,47 +566,60 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
             }
         }
 
-        private void ResolvingCloudAnchors()
-        {
-            // No Cloud Anchor for resolving.
-            if (Controller.ResolvingSet.Count == 0)
-            {
-                return;
-            }
+        // Modified from original to resolve one anchor at a time.
+private void ResolvingCloudAnchors()
+{
+    // No Cloud Anchor for resolving.
+    if (Controller.ResolvingSet.Count == 0)
+    {
+        return;
+    }
 
-            // There are pending or finished resolving tasks.
-            if (_resolvePromises.Count > 0 || _resolveResults.Count > 0)
-            {
-                return;
-            }
+    // There are pending or finished resolving tasks.
+    if (_resolvePromises.Count > 0 || _resolveResults.Count > 0)
+    {
+        return;
+    }
 
-            // ARCore session is not ready for resolving.
-            if (ARSession.state != ARSessionState.SessionTracking)
-            {
-                return;
-            }
+    // ARCore session is not ready for resolving.
+    if (ARSession.state != ARSessionState.SessionTracking)
+    {
+        return;
+    }
 
-            Debug.LogFormat("Attempting to resolve {0} Cloud Anchor(s): {1}",
-                Controller.ResolvingSet.Count,
-                string.Join(",", new List<string>(Controller.ResolvingSet).ToArray()));
-            foreach (string cloudId in Controller.ResolvingSet)
-            {
-                var promise = Controller.AnchorManager.ResolveCloudAnchorAsync(cloudId);
-                if (promise.State == PromiseState.Done)
-                {
-                    Debug.LogFormat("Faild to resolve Cloud Anchor " + cloudId);
-                    OnAnchorResolvedFinished(false, cloudId);
-                }
-                else
-                {
-                    _resolvePromises.Add(promise);
-                    var coroutine = ResolveAnchor(cloudId, promise);
-                    StartCoroutine(coroutine);
-                }
-            }
+    // ✅ Resolve exactly ONE anchor id (first one in the set).
+    string cloudId = null;
+    foreach (var id in Controller.ResolvingSet)
+    {
+        cloudId = id;
+        break;
+    }
 
-            Controller.ResolvingSet.Clear();
-        }
+    if (string.IsNullOrEmpty(cloudId))
+    {
+        Controller.ResolvingSet.Clear();
+        return;
+    }
+
+    Debug.LogFormat("Attempting to resolve 1 Cloud Anchor: {0}", cloudId);
+
+    var promise = Controller.AnchorManager.ResolveCloudAnchorAsync(cloudId);
+    if (promise.State == PromiseState.Done)
+    {
+        Debug.LogFormat("Failed to resolve Cloud Anchor " + cloudId);
+        OnAnchorResolvedFinished(false, cloudId);
+    }
+    else
+    {
+        _resolvePromises.Add(promise);
+        var coroutine = ResolveAnchor(cloudId, promise);
+        StartCoroutine(coroutine);
+    }
+
+    // Clear so we don't re-resolve every frame.
+    Controller.ResolvingSet.Clear();
+}
+
 
         private IEnumerator ResolveAnchor(string cloudId, ResolveCloudAnchorPromise promise)
         {
@@ -610,14 +630,95 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
 
             if (result.CloudAnchorState == CloudAnchorState.Success)
             {
+                ClearPreviousResolvedPoi();
+
+                _lastResolvedAnchorGO = (result.Anchor != null) ? result.Anchor.gameObject : null;
+
+                if (_lastResolvedAnchorGO != null)
+                {
+                    _spawnedPoiVisual = Instantiate(CloudAnchorPrefab);
+                    _spawnedPoiVisual.transform.SetParent(_lastResolvedAnchorGO.transform, false);
+                    _spawnedPoiVisual.transform.localPosition = Vector3.zero;
+                    _spawnedPoiVisual.transform.localRotation = Quaternion.identity;
+                    _spawnedPoiVisual.transform.localScale = Vector3.one;
+
+                    // ✅ Set the card content from the currently active POI
+                    var tour = FindFirstObjectByType<TourManager>();
+                    
+                    Debug.LogWarning("tour");
+                    Debug.LogWarning(tour);
+                    if (tour != null)
+                    {
+                        var poi = tour.GetPOIByCloudId(cloudId);
+                        Debug.LogWarning("cloudId");
+                        Debug.LogWarning(cloudId);
+                        Debug.LogWarning("poi");
+                        Debug.LogWarning(poi);
+                        var view = _spawnedPoiVisual.GetComponentInChildren<POIInfoCardView>(true);
+                        if (view != null)
+                        {
+                            Debug.LogWarning("Data is SET");
+                            view.SetData(poi);
+                        }
+                        Debug.LogWarning("Passed DataSet");
+                        var tapSpawner = _spawnedPoiVisual.GetComponentInChildren<SpawnUIPrefabOnTap>(true);
+                        if (tapSpawner != null)
+                        {
+                            tapSpawner.SetPOI(poi);
+                        }
+                        var audioUI = _spawnedPoiVisual.GetComponentInChildren<POIAudioToggleButton>(true);
+                        if (audioUI != null)
+                        {
+                            audioUI.SetPOI(poi);
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("TourManager not found in scene.");
+                    }
+
+                }
+                else
+                {
+                    Debug.LogWarning("Resolve succeeded but result.Anchor was null (no anchor transform to parent to).");
+                }
+
+                // ✅ Call after setup so we don't accidentally advance POI before we read it
                 OnAnchorResolvedFinished(true, cloudId);
-                Instantiate(CloudAnchorPrefab, result.Anchor.transform);
             }
             else
             {
                 OnAnchorResolvedFinished(false, cloudId, result.CloudAnchorState.ToString());
             }
+
+
+
+            // Allow future resolves while staying in ARView
+            _resolveResults.Clear();
         }
+
+        private void ClearPreviousResolvedPoi()
+        {
+
+            var oldAudio = _spawnedPoiVisual != null ? _spawnedPoiVisual.GetComponentInChildren<AudioSource>(true) : null;
+            if (oldAudio != null) 
+                oldAudio.Stop();
+                
+            if (_spawnedPoiVisual != null)
+            {
+                Destroy(_spawnedPoiVisual);
+                _spawnedPoiVisual = null;
+            }
+
+            if (_lastResolvedAnchorGO != null)
+            {
+                Destroy(_lastResolvedAnchorGO);
+                _lastResolvedAnchorGO = null;
+            }
+
+        }
+
+
 
         private void OnAnchorHostedFinished(bool success, string response = null)
         {
@@ -648,6 +749,13 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
                 InstructionText.text = "Resolve success!";
                 DebugText.text =
                     string.Format("Succeed to resolve the Cloud Anchor: {0}.", cloudId);
+
+                // ✅ Modern Unity API
+                var tour = FindFirstObjectByType<TourManager>();
+                if (tour != null)
+                {
+                    tour.OnPOIResolved(cloudId);
+                }
             }
             else
             {
@@ -656,6 +764,7 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
                     (response == null ? "." : "with error " + response + ".");
             }
         }
+
 
         private void UpdateInitialInstruction()
         {

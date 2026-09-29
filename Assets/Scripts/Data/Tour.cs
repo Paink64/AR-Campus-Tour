@@ -5,7 +5,9 @@ using UnityEngine;
 public class Tour : ScriptableObject
 {
     public string tourName;
-    [TextArea] public string tourDescription;
+    
+    [TextArea(3, 5)]
+    public string tourDescription;
 
     public List<PointOfInterest> pois = new List<PointOfInterest>();
 }
