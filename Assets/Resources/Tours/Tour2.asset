@@ -15,6 +15,7 @@ MonoBehaviour:
   tourName: A Partial Tour
   tourDescription: "To test the tour system\n 2"
   pois:
+  - {fileID: 11400000, guid: ab056880ef8399a41af21bd93eb5a3b1, type: 2}
   - {fileID: 11400000, guid: c5d90a7f18906a9419f7da2b46506970, type: 2}
   - {fileID: 11400000, guid: d7445b1274bd0734db0f7ea2df5305f3, type: 2}
   - {fileID: 11400000, guid: 9116a1841951ea240bb4faab09f6f104, type: 2}

@@ -11,7 +11,7 @@ public class POIAudioToggleButton : MonoBehaviour
     public Button playButton;
     public Button skipForwardButton;
     public Button skipBackwardButton;
-    public TextMeshProUGUI buttonLabel; // optional ("Play"/"Pause")
+    public TextMeshProUGUI buttonLabel;
 
     [Header("Settings")]
     public float skipSeconds = 5f;

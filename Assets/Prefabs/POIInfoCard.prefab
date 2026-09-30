@@ -649,6 +649,7 @@ GameObject:
   - component: {fileID: 6189366991651358}
   - component: {fileID: 8313645535255138849}
   - component: {fileID: 7655382933597810325}
+  - component: {fileID: 5305485300776315696}
   m_Layer: 0
   m_Name: POIInfoCard
   m_TagString: Untagged
@@ -711,6 +712,20 @@ MonoBehaviour:
   audioSource: {fileID: 0}
   secondsPerSlide: 2.5
   autoplay: 1
+--- !u!114 &5305485300776315696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6012818824791284970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 649389d102efb9d48a81d6bd7ab906ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiPrefab: {fileID: 4024947953444953422, guid: f24cd22dca1a7f04eadece9936d9a8a8, type: 3}
+  poi: {fileID: 0}
 --- !u!1 &6531502121962639639
 GameObject:
   m_ObjectHideFlags: 0
