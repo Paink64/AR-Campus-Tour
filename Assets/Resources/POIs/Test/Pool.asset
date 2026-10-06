@@ -20,8 +20,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b4873fc2957aaf64ba639a16c6af09ec, type: 3}
   - {fileID: 21300000, guid: bf33c5fe195d66c4e9eccb06d3e4ee31, type: 3}
   - {fileID: 21300000, guid: 79ff219cf1e6e0541806b8f753b57a33, type: 3}
-  audioGuide: {fileID: 8300000, guid: 7886a63092c101f47be13426634593ae, type: 3}
-  latitude: 0
-  longitude: 0
+  audioGuide: {fileID: 8300000, guid: 533c6d99cd6781f4798475e7b2d0def1, type: 3}
+  latitude: 33.95581
+  longitude: -117.4667
   triggerRadiusMeters: 30
   cloudAnchorId: ua-0a7beec5594ece46ac71630c7337929d

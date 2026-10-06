@@ -17,7 +17,7 @@ MonoBehaviour:
   gallery:
   - {fileID: 21300000, guid: 09db7a30f6d745243b3c12166ced94f6, type: 3}
   audioGuide: {fileID: 8300000, guid: d4604dcf00713a947a0e50baf695673b, type: 3}
-  latitude: 0
-  longitude: 0
+  latitude: 33.95567
+  longitude: -117.4667
   triggerRadiusMeters: 30
   cloudAnchorId: ua-4f727ba90a5e8277ed72e6c48c9e1e35

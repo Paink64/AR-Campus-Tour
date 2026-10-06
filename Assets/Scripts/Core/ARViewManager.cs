@@ -6,7 +6,7 @@
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-//
+//4
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
@@ -17,9 +17,8 @@
 //
 // </copyright>
 //-----------------------------------------------------------------------
-
-namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
-{
+    using Google.XR.ARCoreExtensions;
+    using Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors;
     using System.Collections;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
@@ -221,6 +220,9 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
         private GameObject _lastResolvedAnchorGO = null;
         private AudioSource _audio;
 
+        public string poiTitle;
+        public double poiLatitude;
+        public double poiLongitude;
 
         /// <summary>
         /// Get the camera pose for the current frame.
@@ -613,8 +615,13 @@ private void ResolvingCloudAnchors()
     else
     {
         _resolvePromises.Add(promise);
+        var tour = FindFirstObjectByType<TourManager>();
         var coroutine = ResolveAnchor(cloudId, promise);
         StartCoroutine(coroutine);
+        var poi = tour.GetPOIByCloudId(cloudId);
+        poiTitle = poi.title;
+        poiLatitude = poi.latitude;
+        poiLongitude = poi.longitude;
     }
 
     // Clear so we don't re-resolve every frame.
@@ -646,8 +653,6 @@ private void ResolvingCloudAnchors()
                     // ✅ Set the card content from the currently active POI
                     var tour = FindFirstObjectByType<TourManager>();
                     
-                    Debug.LogWarning("tour");
-                    Debug.LogWarning(tour);
                     if (tour != null)
                     {
                         var poi = tour.GetPOIByCloudId(cloudId);
@@ -656,6 +661,7 @@ private void ResolvingCloudAnchors()
                         Debug.LogWarning("poi");
                         Debug.LogWarning(poi);
                         var view = _spawnedPoiVisual.GetComponentInChildren<POIInfoCardView>(true);
+
                         if (view != null)
                         {
                             Debug.LogWarning("Data is SET");
@@ -924,4 +930,3 @@ private void ResolvingCloudAnchors()
             SaveButton.GetComponentInChildren<Text>().color = active ? _activeColor : Color.gray;
         }
     }
-}

@@ -7,12 +7,12 @@ public class FullScreenPOIUI : MonoBehaviour
     public static FullScreenPOIUI Instance { get; private set; }
 
     [Header("Root")]
-    public GameObject panelRoot; // FullScreenPOIPanel
+    public GameObject panelRoot;
 
     [Header("UI")]
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI bodyText;
-    public POISlideshow slideshow; // optional
+    public POISlideshow slideshow;
     public Button closeButton;
 
     void Awake()
