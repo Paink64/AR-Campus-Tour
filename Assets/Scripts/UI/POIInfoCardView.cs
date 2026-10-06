@@ -25,13 +25,6 @@ public class POIInfoCardView : MonoBehaviour
             return;
         }
 
-        if (audioSource != null)
-        {
-            audioSource.Stop();
-            audioSource.clip = poi.audioGuide;
-            audioSource.time = 0f;
-        }
-
         // --- Text ---
         if (titleText != null){
             titleText.text = poi.title ?? "";
@@ -45,7 +38,11 @@ public class POIInfoCardView : MonoBehaviour
 
         // --- Audio ---
         if (audioSource != null)
+        {
+            audioSource.Stop();
             audioSource.clip = poi.audioGuide;
+            audioSource.time = 0f;
+        }
 
         // --- Gallery ---
         SetGallery(poi.gallery);

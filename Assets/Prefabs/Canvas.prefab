@@ -2574,6 +2574,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Controller: {fileID: 0}
   CloudAnchorPrefab: {fileID: 6012818824791284970, guid: a1270019b9c44b14b950c8ba3ee71d05, type: 3}
+  HostingAnchorPrefab: {fileID: 0}
   MapQualityIndicatorPrefab: {fileID: 1627662587363780, guid: 91e902992b96240738192b547cbbed35, type: 3}
   InstructionBar: {fileID: 301086530900836719}
   NamePanel: {fileID: 701116366380757268}
@@ -6348,7 +6349,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3293133357074217245
 RectTransform:
   m_ObjectHideFlags: 0

@@ -219,6 +219,7 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
 
         private GameObject _spawnedPoiVisual = null;
         private GameObject _lastResolvedAnchorGO = null;
+        private AudioSource _audio;
 
 
         /// <summary>
@@ -666,11 +667,8 @@ private void ResolvingCloudAnchors()
                         {
                             tapSpawner.SetPOI(poi);
                         }
-                        var audioUI = _spawnedPoiVisual.GetComponentInChildren<POIAudioToggleButton>(true);
-                        if (audioUI != null)
-                        {
-                            audioUI.SetPOI(poi);
-                        }
+                        _audio = _spawnedPoiVisual.GetComponentInChildren<AudioSource>();
+
                     }
                     else
                     {
@@ -695,6 +693,36 @@ private void ResolvingCloudAnchors()
 
             // Allow future resolves while staying in ARView
             _resolveResults.Clear();
+        }
+
+        public void PlayAudio()
+        {
+            if (_audio != null && !_audio.isPlaying)
+            {
+                _audio.Play();
+            }
+            else if (_audio != null && _audio.isPlaying)
+            {
+                _audio.Pause();
+            }
+        }
+
+        public void SkipAudioAheadFiveSeconds()
+        {
+            if (_audio != null && _audio.isPlaying)
+            {
+                float newTime = _audio.time + 5f;
+                _audio.time = Mathf.Min(newTime, _audio.clip.length);
+            }
+        }
+
+        public void SkipAudioBackFiveSeconds()
+        {
+            if (_audio != null && _audio.isPlaying)
+            {
+                float newTime = _audio.time - 5f;
+                _audio.time = Mathf.Max(newTime, 0f);
+            }
         }
 
         private void ClearPreviousResolvedPoi()
