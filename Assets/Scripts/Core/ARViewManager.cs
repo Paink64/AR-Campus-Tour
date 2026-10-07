@@ -720,6 +720,12 @@ private void ResolvingCloudAnchors()
                 float newTime = _audio.time + 5f;
                 _audio.time = Mathf.Min(newTime, _audio.clip.length);
             }
+            else if(_audio != null && !_audio.isPlaying){
+                _audio.Play();
+                float newTime = _audio.time + 5f;
+                _audio.time = Mathf.Min(newTime, _audio.clip.length);
+                _audio.Pause();
+            }
         }
 
         public void SkipAudioBackFiveSeconds()
@@ -728,6 +734,12 @@ private void ResolvingCloudAnchors()
             {
                 float newTime = _audio.time - 5f;
                 _audio.time = Mathf.Max(newTime, 0f);
+            }
+            else if(_audio != null && !_audio.isPlaying){
+                _audio.Play();
+                float newTime = _audio.time - 5f;
+                _audio.time = Mathf.Max(newTime, 0f);
+                _audio.Pause();
             }
         }
 
