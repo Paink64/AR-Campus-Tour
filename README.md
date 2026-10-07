@@ -12,6 +12,8 @@ Shows how Points of Intrest are spawned into the world in order and previous one
 
 # Example of Audio and Guide
 
+[Audio and Guide Test](https://youtube.com/shorts/38S8dmrJnyw)
+
 Shows the added full screen option when point is tapped, audio playing and controls, and an arrow to guide users to next point.<br>
 
 Notes on things I may want to add or change<br>
@@ -19,5 +21,3 @@ Notes on things I may want to add or change<br>
 -Skip ahead/behind buttons don't work while paused<br>
 -Arrow is gittery<br>
 -Accuracy of the arrow may not work with smaller spaces, but will be fine for guiding around a campus as Latitude has ~1.11 m and Longitude had ~11.1 m of accuracy
-
-[Audio and Guide Test](https://youtube.com/shorts/38S8dmrJnyw)
