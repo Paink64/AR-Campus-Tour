@@ -22,6 +22,8 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
 
         [Header("UI")]
         public Button ResolveButton;
+        public Text tourDescription;
+
 
         private Color _activeColor;
         private Tour _selectedTour;
@@ -70,7 +72,7 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
             {
                 foreach (var tour in Tours)
                 {
-                    options.Add(new TMP_Dropdown.OptionData(tour ? tour.tourName : "(Missing Tour)"));
+                    options.Add(new TMP_Dropdown.OptionData(tour ? tour.tourName : "Please select a tour"));
                 }
             }
 
@@ -82,12 +84,13 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
             if (Tours == null || index < 0 || index >= Tours.Count || Tours[index] == null)
             {
                 _selectedTour = null;
+                tourDescription.text = "Please select a tour";
                 SetButtonActive(ResolveButton, false);
                 return;
             }
 
             _selectedTour = Tours[index];
-
+            tourDescription.text = _selectedTour.tourDescription;
             // Enable resolve only if the tour has at least one POI with a valid cloudAnchorId
             bool hasAnyResolvable = TryGetFirstResolvableAnchorId(_selectedTour, out _);
             SetButtonActive(ResolveButton, hasAnyResolvable);

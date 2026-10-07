@@ -45,7 +45,7 @@ public class TourManager : MonoBehaviour
         var options = new List<TMP_Dropdown.OptionData>();
 
         foreach (var t in Tours)
-            options.Add(new TMP_Dropdown.OptionData(t ? t.tourName : "(Missing Tour)"));
+            options.Add(new TMP_Dropdown.OptionData(t ? t.tourName : "Please select a tour"));
 
         TourDropdown.AddOptions(options);
     }

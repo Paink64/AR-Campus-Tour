@@ -13,9 +13,7 @@ MonoBehaviour:
   m_Name: Tour
   m_EditorClassIdentifier: 
   tourName: The Full Tour
-  tourDescription: 'To test the tour system
-
-'
+  tourDescription: A quick tour of my back yard for testing purposes.
   pois:
   - {fileID: 11400000, guid: 9116a1841951ea240bb4faab09f6f104, type: 2}
   - {fileID: 11400000, guid: c5e24e20c607a884d9d844c8d83d528b, type: 2}

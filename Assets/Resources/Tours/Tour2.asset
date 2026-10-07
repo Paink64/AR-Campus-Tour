@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Tour2
   m_EditorClassIdentifier: 
   tourName: A Partial Tour
-  tourDescription: "To test the tour system\n 2"
+  tourDescription: Another test tour that is smaller for quicker testing of features
+    while making the application.
   pois:
   - {fileID: 11400000, guid: ab056880ef8399a41af21bd93eb5a3b1, type: 2}
   - {fileID: 11400000, guid: c5d90a7f18906a9419f7da2b46506970, type: 2}
