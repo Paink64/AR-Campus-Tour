@@ -17,7 +17,7 @@ public class GuideSystem : MonoBehaviour
 
     public Text InstructionText;
     public RectTransform imageToRotate;
-    public float rotationSpeed = 5f;
+    public float rotationSpeed = 4f;
 
     public bool IsServicesInitialized { get; private set; } = false;
 
@@ -84,14 +84,25 @@ public class GuideSystem : MonoBehaviour
 
         if (imageToRotate != null)
         {
-            imageToRotate.Rotate(Vector3.forward * Input.compass.trueHeading);
-        }
-        if (imageToRotate != null)
-        {
             float targetUIRotation = destinationBearing - currentHeading;
-            Quaternion targetQuaternion = Quaternion.Euler(0, 0, -targetUIRotation);
-            imageToRotate.localRotation = Quaternion.Slerp(imageToRotate.localRotation, targetQuaternion, Time.deltaTime * rotationSpeed);
+
+            // Keep the angle within -180 to 180 degrees
+            targetUIRotation = Mathf.DeltaAngle(0f, targetUIRotation);
+
+            Quaternion targetRotation = Quaternion.Euler(
+                0f,
+                0f,
+                -targetUIRotation
+            );
+
+            // Smoothly rotate toward the target
+            imageToRotate.localRotation = Quaternion.Slerp(
+                imageToRotate.localRotation,
+                targetRotation,
+                1f - Mathf.Exp(-rotationSpeed * Time.deltaTime)
+            );
         }
+        
         // Test output
         InstructionText.text = $"Lat: {currentLatitude:F6} | Lon: {currentLongitude:F6} | Heading: {currentHeading:F1}° \nNext POI: {arData.poiTitle} \nLat: {arData.poiLatitude:F6} | Lon: {arData.poiLongitude:F6} Bearing: {destinationBearing:F0}°\n<b>{turnDirection}</b>";
     }

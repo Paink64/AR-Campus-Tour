@@ -86,11 +86,6 @@
         public Text TrackingHelperText;
 
         /// <summary>
-        /// The debug text in bottom snack bar.
-        /// </summary>
-        public Text DebugText;
-
-        /// <summary>
         /// The button to save the typed name.
         /// </summary>
         public Button SaveButton;
@@ -254,7 +249,6 @@
             _hostedCloudAnchor.Name = NameField.text;
             Controller.SaveCloudAnchorHistory(_hostedCloudAnchor);
 
-            DebugText.text = string.Format("Saved Cloud Anchor:\n{0}.", _hostedCloudAnchor.Name);
             ShareButton.gameObject.SetActive(true);
             NamePanel.SetActive(false);
         }
@@ -265,7 +259,6 @@
         public void OnShareButtonClicked()
         {
             GUIUtility.systemCopyBuffer = _hostedCloudAnchor.Id;
-            DebugText.text = "Copied cloud id: " + _hostedCloudAnchor.Id;
         }
 
         /// <summary>
@@ -307,7 +300,6 @@
                 case PersistentCloudAnchorsController.ApplicationMode.Hosting:
                 case PersistentCloudAnchorsController.ApplicationMode.Resolving:
                     InstructionText.text = "Detecting flat surface...";
-                    DebugText.text = "ARCore is preparing for " + Controller.Mode;
                     break;
             }
         }
@@ -470,7 +462,6 @@
 
                 InstructionText.text = " To save this location, walk around the object to " +
                     "capture it from different angles";
-                DebugText.text = "Waiting for sufficient mapping quaility...";
 
                 UpdatePlaneVisibility(false);
             }
@@ -497,7 +488,6 @@
             // Ideally, the pose should represent users’ expected perspectives.
             FeatureMapQuality quality =
                 Controller.AnchorManager.EstimateFeatureMapQualityForHosting(GetCameraPose());
-            DebugText.text = "Current mapping quality: " + quality;
             qualityState = (int)quality;
             _qualityIndicator.UpdateQualityState(qualityState);
 
@@ -528,11 +518,6 @@
 
             // Start hosting:
             InstructionText.text = "Processing...";
-            DebugText.text = "Mapping quality has reached sufficient threshold, " +
-                "creating Cloud Anchor.";
-            DebugText.text = string.Format(
-                "FeatureMapQuality has reached {0}, triggering CreateCloudAnchor.",
-                Controller.AnchorManager.EstimateFeatureMapQualityForHosting(GetCameraPose()));
 
             // Creating a Cloud Anchor with lifetime = 1 day.
             // This is configurable up to 365 days when keyless authentication is used.
@@ -772,8 +757,6 @@ private void ResolvingCloudAnchors()
             {
                 InstructionText.text = "Finish!";
                 Invoke("DoHideInstructionBar", 1.5f);
-                DebugText.text =
-                    string.Format("Succeed to host the Cloud Anchor: {0}.", response);
 
                 // Display name panel and hide instruction bar.
                 NameField.text = _hostedCloudAnchor.Name;
@@ -783,8 +766,6 @@ private void ResolvingCloudAnchors()
             else
             {
                 InstructionText.text = "Host failed.";
-                DebugText.text = "Failed to host a Cloud Anchor" + (response == null ? "." :
-                    "with error " + response + ".");
             }
         }
 
@@ -793,8 +774,6 @@ private void ResolvingCloudAnchors()
             if (success)
             {
                 InstructionText.text = "Resolve success!";
-                DebugText.text =
-                    string.Format("Succeed to resolve the Cloud Anchor: {0}.", cloudId);
 
                 // ✅ Modern Unity API
                 var tour = FindFirstObjectByType<TourManager>();
@@ -806,8 +785,6 @@ private void ResolvingCloudAnchors()
             else
             {
                 InstructionText.text = "Resolve failed.";
-                DebugText.text = "Failed to resolve Cloud Anchor: " + cloudId +
-                    (response == null ? "." : "with error " + response + ".");
             }
         }
 
@@ -819,14 +796,11 @@ private void ResolvingCloudAnchors()
                 case PersistentCloudAnchorsController.ApplicationMode.Hosting:
                     // Initial instruction for hosting flow:
                     InstructionText.text = "Tap to place an object.";
-                    DebugText.text = "Tap a vertical or horizontal plane...";
                     return;
                 case PersistentCloudAnchorsController.ApplicationMode.Resolving:
                     // Initial instruction for resolving flow:
                     InstructionText.text =
                         "Look at the location you expect to see the AR experience appear.";
-                    DebugText.text = string.Format("Attempting to resolve {0} anchors...",
-                        Controller.ResolvingSet.Count);
                     return;
                 default:
                     return;
@@ -922,7 +896,6 @@ private void ResolvingCloudAnchors()
             }
 
             _isReturning = true;
-            DebugText.text = reason;
             Invoke("DoReturnToHomePage", 3.0f);
         }
 

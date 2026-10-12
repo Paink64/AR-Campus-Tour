@@ -27,10 +27,19 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
     public class SafeAreaScaler : MonoBehaviour
     {
         private Rect _screenSafeArea = new Rect(0, 0, 0, 0);
+        private RectTransform _rectTransform;
 
         /// <summary>
         /// Unity's Awake() method.
         /// </summary>
+        public void Awake()
+        {
+            _rectTransform = GetComponent<RectTransform>();
+            
+            // Ensure anchors are set to full stretch
+            _rectTransform.anchorMin = Vector2.zero;
+            _rectTransform.anchorMax = Vector2.one;
+        }
         public void Update()
         {
             Rect safeArea;
@@ -45,19 +54,17 @@ namespace Google.XR.ARCoreExtensions.Samples.PersistentCloudAnchors
 
         private void MatchRectTransformToSafeArea()
         {
-            RectTransform rectTransform = GetComponent<RectTransform>();
 
             // lower left corner offset
-            Vector2 offsetMin = new Vector2(_screenSafeArea.xMin,
-                Screen.height - _screenSafeArea.yMax);
+            Vector2 offsetMin = new Vector2(_screenSafeArea.xMin, _screenSafeArea.yMin);
 
             // upper right corner offset
             Vector2 offsetMax = new Vector2(
                 _screenSafeArea.xMax - Screen.width,
                 -_screenSafeArea.yMin);
 
-            rectTransform.offsetMin = offsetMin;
-            rectTransform.offsetMax = offsetMax;
+            _rectTransform.offsetMin = offsetMin;
+            _rectTransform.offsetMax = offsetMax;
         }
     }
 }
