@@ -11,30 +11,21 @@ public class POIInfoCardView : MonoBehaviour
     public AudioSource audioSource;
 
     [Header("Slideshow")]
-    public float secondsPerSlide = 2.5f;
+    public float secondsPerImage = 3f;
     public bool autoplay = true;
 
-    private Sprite[] _slides;
-    private int _index;
+    private Sprite[] _gallery;
+    private int _currentIndex;
     private float _timer;
 
     public void SetData(PointOfInterest poi)
     {
-        if (poi == null)
-        {
-            return;
-        }
+        if (poi == null) return;
 
         // --- Text ---
-        if (titleText != null){
-            titleText.text = poi.title ?? "";
-            Debug.LogWarning("Data title");
-            Debug.LogWarning(poi.title);
-            Debug.LogWarning(titleText.text);
-        }
+        if (titleText != null) titleText.text = poi.title ?? "";
 
-        if (bodyText != null)
-            bodyText.text = poi.description ?? "";
+        if (bodyText != null) bodyText.text = poi.description ?? "";
 
         // --- Audio ---
         if (audioSource != null)
@@ -45,85 +36,56 @@ public class POIInfoCardView : MonoBehaviour
         }
 
         // --- Gallery ---
-        SetGallery(poi.gallery);
-
-        Debug.Log($"[POIInfoCardView] SetData OK: '{poi.title}', gallery count = {(poi.gallery == null ? 0 : poi.gallery.Length)}");
-    }
-
-    private void SetGallery(Sprite[] gallery)
-    {
-        _slides = gallery;
-        _index = 0;
+        _gallery = poi.gallery;
+        _currentIndex = 0;
         _timer = 0f;
 
-        if (galleryImage == null)
-            return;
-
-        // No images → hide gallery
-        if (_slides == null || _slides.Length == 0)
-        {
-            galleryImage.enabled = false;
-            return;
-        }
-
-        // Find first non-null image
-        for (int i = 0; i < _slides.Length; i++)
-        {
-            if (_slides[i] != null)
-            {
-                _index = i;
-                ShowSlide(_index);
-                return;
-            }
-        }
-
-        // All images were null
-        galleryImage.enabled = false;
+        UpdateImage();
     }
 
-    void Update()
+    private void Update()
     {
         if (!autoplay) return;
+        if (_gallery == null || _gallery.Length <= 1) return;
         if (galleryImage == null || !galleryImage.enabled) return;
-        if (_slides == null || _slides.Length <= 1) return;
 
         _timer += Time.deltaTime;
-        if (_timer < secondsPerSlide) return;
 
-        _timer = 0f;
-        AdvanceSlide();
-    }
-
-    private void AdvanceSlide()
-    {
-        if (_slides == null || _slides.Length == 0) return;
-
-        int attempts = 0;
-
-        do
+        if (_timer >= secondsPerImage)
         {
-            _index = (_index + 1) % _slides.Length;
-            attempts++;
+            _timer = 0f;
+            UpdateImage();
         }
-        while (_slides[_index] == null && attempts < _slides.Length);
-
-        if (_slides[_index] != null)
-            ShowSlide(_index);
     }
 
-    private void ShowSlide(int index)
+    private void UpdateImage()
     {
-        if (galleryImage == null || _slides == null) return;
+        if (galleryImage == null) return;
 
-        Sprite s = _slides[index];
-        if (s == null)
+        if (_gallery == null || _gallery.Length == 0)
         {
             galleryImage.enabled = false;
             return;
         }
 
-        galleryImage.sprite = s;
-        galleryImage.preserveAspect = true;
-        galleryImage.enabled = true;
+        // Find next valid image and continues cycle
+        int attempts = 0;
+        do
+        {
+            _currentIndex = (_currentIndex + 1) % _gallery.Length;
+            attempts++;
+        }
+        while (_gallery[_currentIndex] == null && attempts < _gallery.Length);
+
+        if (_gallery[_currentIndex] != null)
+        {
+            galleryImage.sprite = _gallery[_currentIndex];
+            galleryImage.preserveAspect = true;
+            galleryImage.enabled = true;
+        }
+        else
+        {
+            galleryImage.enabled = false;
+        }
     }
 }

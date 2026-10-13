@@ -70,10 +70,12 @@ public class GuideSystem : MonoBehaviour
     {
         if (!IsServicesInitialized || Input.location.status != LocationServiceStatus.Running) return;
 
+        // Gets phone information
         float currentLatitude = Input.location.lastData.latitude;
         float currentLongitude = Input.location.lastData.longitude;
         float currentHeading = Input.compass.trueHeading;
 
+        // Calculate where the arrow needs to turn
         float destinationBearing = CalculateBearing(currentLatitude, currentLongitude, (float)arData.poiLatitude, (float)arData.poiLongitude);
         float turnAngle = destinationBearing - currentHeading;
         if (turnAngle > 180) turnAngle -= 360;
@@ -82,6 +84,7 @@ public class GuideSystem : MonoBehaviour
         string turnDirection = turnAngle >= 0 ? $"Turn Right {turnAngle:F0}°" : $"Turn Left {Mathf.Abs(turnAngle):F0}°";
         if (Mathf.Abs(turnAngle) < 5f) turnDirection = "Target directly ahead!";
 
+        // Rotate image to face destination
         if (imageToRotate != null)
         {
             float targetUIRotation = destinationBearing - currentHeading;
@@ -89,18 +92,10 @@ public class GuideSystem : MonoBehaviour
             // Keep the angle within -180 to 180 degrees
             targetUIRotation = Mathf.DeltaAngle(0f, targetUIRotation);
 
-            Quaternion targetRotation = Quaternion.Euler(
-                0f,
-                0f,
-                -targetUIRotation
-            );
+            Quaternion targetRotation = Quaternion.Euler(0f, 0f, -targetUIRotation);
 
             // Smoothly rotate toward the target
-            imageToRotate.localRotation = Quaternion.Slerp(
-                imageToRotate.localRotation,
-                targetRotation,
-                1f - Mathf.Exp(-rotationSpeed * Time.deltaTime)
-            );
+            imageToRotate.localRotation = Quaternion.Slerp(imageToRotate.localRotation, targetRotation, 1f - Mathf.Exp(-rotationSpeed * Time.deltaTime));
         }
         
         // Test output
@@ -115,12 +110,15 @@ public class GuideSystem : MonoBehaviour
         float rLatitude2 = latitude2 * Mathf.Deg2Rad;
         float rLongitude2 = longitude2 * Mathf.Deg2Rad;
 
+        // Math to calcuate Bearing
         float diffLongitude = rLongitude2 - rLongitude1;
 
         float y = Mathf.Sin(diffLongitude) * Mathf.Cos(rLatitude2);
         float x = Mathf.Cos(rLatitude1) * Mathf.Sin(rLatitude2) - Mathf.Sin(rLatitude1) * Mathf.Cos(rLatitude2) * Mathf.Cos(diffLongitude);
 
         float bearingRad = Mathf.Atan2(y, x);
+
+        // Convert radians to degrees
         float twoPi = 2 * Mathf.PI;
         bearingRad = ((bearingRad % twoPi) + twoPi) % twoPi;
         float bearingDeg = bearingRad * Mathf.Rad2Deg;

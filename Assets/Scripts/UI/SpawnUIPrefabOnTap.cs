@@ -14,15 +14,8 @@ public class SpawnUIPrefabOnTap : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (uiPrefab == null)
-        {
-            return;
-        }
-
-        if (poi == null)
-        {
-            return;
-        }
+        if (uiPrefab == null) return;
+        if (poi == null) return;
 
         // Only spawn once
         if (_spawned != null)
@@ -33,12 +26,12 @@ public class SpawnUIPrefabOnTap : MonoBehaviour
         }
 
         _spawned = Instantiate(uiPrefab);
-
         PushData();
     }
 
     private void PushData()
     {
+        // Set the data for the full screen
         var view = _spawned.GetComponentInChildren<FullScreenPOIView>(true);
         if (view != null)
         {

@@ -969,10 +969,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1595254331824214192, guid: 222cb4a05cc5bee409580e389bde08c3, type: 3}
-      propertyPath: m_Resource
-      value: 
-      objectReference: {fileID: 8300000, guid: 533c6d99cd6781f4798475e7b2d0def1, type: 3}
     - target: {fileID: 4585311374246557076, guid: 222cb4a05cc5bee409580e389bde08c3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1000,7 +996,7 @@ PrefabInstance:
     - target: {fileID: 5305485300776315696, guid: 222cb4a05cc5bee409580e389bde08c3, type: 3}
       propertyPath: poi
       value: 
-      objectReference: {fileID: 11400000, guid: c5d90a7f18906a9419f7da2b46506970, type: 2}
+      objectReference: {fileID: 11400000, guid: 9116a1841951ea240bb4faab09f6f104, type: 2}
     - target: {fileID: 6012818824791284970, guid: 222cb4a05cc5bee409580e389bde08c3, type: 3}
       propertyPath: m_Name
       value: POIInfoCard

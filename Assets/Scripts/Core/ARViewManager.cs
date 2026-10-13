@@ -554,105 +554,109 @@
             }
         }
 
-        // Modified from original to resolve one anchor at a time.
-private void ResolvingCloudAnchors()
-{
-    // No Cloud Anchor for resolving.
-    if (Controller.ResolvingSet.Count == 0)
-    {
-        return;
-    }
+        // Modified from original to resolve one anchor at a time
+        private void ResolvingCloudAnchors()
+        {
+            // No Cloud Anchor for resolving
+            if (Controller.ResolvingSet.Count == 0)
+            {
+                return;
+            }
 
-    // There are pending or finished resolving tasks.
-    if (_resolvePromises.Count > 0 || _resolveResults.Count > 0)
-    {
-        return;
-    }
+            // Check if another anchor is already being processed
+            if (_resolvePromises.Count > 0 || _resolveResults.Count > 0)
+            {
+                return;
+            }
 
-    // ARCore session is not ready for resolving.
-    if (ARSession.state != ARSessionState.SessionTracking)
-    {
-        return;
-    }
+            // ARCore session is not ready for resolving
+            if (ARSession.state != ARSessionState.SessionTracking)
+            {
+                return;
+            }
 
-    // ✅ Resolve exactly ONE anchor id (first one in the set).
-    string cloudId = null;
-    foreach (var id in Controller.ResolvingSet)
-    {
-        cloudId = id;
-        break;
-    }
+            // Select one Cloud Anchor ID
+            string cloudId = null;
+            foreach (var id in Controller.ResolvingSet)
+            {
+                cloudId = id;
+                break;
+            }
 
-    if (string.IsNullOrEmpty(cloudId))
-    {
-        Controller.ResolvingSet.Clear();
-        return;
-    }
+            if (string.IsNullOrEmpty(cloudId))
+            {
+                Controller.ResolvingSet.Clear();
+                return;
+            }
 
-    Debug.LogFormat("Attempting to resolve 1 Cloud Anchor: {0}", cloudId);
 
-    var promise = Controller.AnchorManager.ResolveCloudAnchorAsync(cloudId);
-    if (promise.State == PromiseState.Done)
-    {
-        Debug.LogFormat("Failed to resolve Cloud Anchor " + cloudId);
-        OnAnchorResolvedFinished(false, cloudId);
-    }
-    else
-    {
-        _resolvePromises.Add(promise);
-        var tour = FindFirstObjectByType<TourManager>();
-        var coroutine = ResolveAnchor(cloudId, promise);
-        StartCoroutine(coroutine);
-        var poi = tour.GetPOIByCloudId(cloudId);
-        poiTitle = poi.title;
-        poiLatitude = poi.latitude;
-        poiLongitude = poi.longitude;
-    }
+            var promise = Controller.AnchorManager.ResolveCloudAnchorAsync(cloudId);
+            if (promise.State == PromiseState.Done)
+            {
+                OnAnchorResolvedFinished(false, cloudId);
+            }
+            else
+            {
+                _resolvePromises.Add(promise);
 
-    // Clear so we don't re-resolve every frame.
-    Controller.ResolvingSet.Clear();
-}
+                var tour = FindFirstObjectByType<TourManager>();
+
+                var coroutine = ResolveAnchor(cloudId, promise);
+                StartCoroutine(coroutine);
+
+                // Find POI information connected to ID
+                var poi = tour.GetPOIByCloudId(cloudId);
+                poiTitle = poi.title;
+                poiLatitude = poi.latitude;
+                poiLongitude = poi.longitude;
+            }
+
+            // Clear so we don't re-resolve every frame making performance better
+            Controller.ResolvingSet.Clear();
+        }
 
 
         private IEnumerator ResolveAnchor(string cloudId, ResolveCloudAnchorPromise promise)
         {
+            // Pauses this coroutine until the promise finishes
             yield return promise;
             var result = promise.Result;
             _resolvePromises.Remove(promise);
             _resolveResults.Add(result);
 
+            // Check if anchor was found
             if (result.CloudAnchorState == CloudAnchorState.Success)
             {
+                // Clear previous POI
                 ClearPreviousResolvedPoi();
 
+                // Save new POI
                 _lastResolvedAnchorGO = (result.Anchor != null) ? result.Anchor.gameObject : null;
 
                 if (_lastResolvedAnchorGO != null)
                 {
+                    // Create POI in real world
                     _spawnedPoiVisual = Instantiate(CloudAnchorPrefab);
+
+                    // Set position of the visual compared to the Anchor
                     _spawnedPoiVisual.transform.SetParent(_lastResolvedAnchorGO.transform, false);
                     _spawnedPoiVisual.transform.localPosition = Vector3.zero;
                     _spawnedPoiVisual.transform.localRotation = Quaternion.identity;
                     _spawnedPoiVisual.transform.localScale = Vector3.one;
 
-                    // ✅ Set the card content from the currently active POI
+                    // Set the card content from the currently active POI
                     var tour = FindFirstObjectByType<TourManager>();
                     
                     if (tour != null)
                     {
                         var poi = tour.GetPOIByCloudId(cloudId);
-                        Debug.LogWarning("cloudId");
-                        Debug.LogWarning(cloudId);
-                        Debug.LogWarning("poi");
-                        Debug.LogWarning(poi);
                         var view = _spawnedPoiVisual.GetComponentInChildren<POIInfoCardView>(true);
 
                         if (view != null)
                         {
-                            Debug.LogWarning("Data is SET");
                             view.SetData(poi);
                         }
-                        Debug.LogWarning("Passed DataSet");
+
                         var tapSpawner = _spawnedPoiVisual.GetComponentInChildren<SpawnUIPrefabOnTap>(true);
                         if (tapSpawner != null)
                         {
@@ -661,26 +665,16 @@ private void ResolvingCloudAnchors()
                         _audio = _spawnedPoiVisual.GetComponentInChildren<AudioSource>();
 
                     }
-                    else
-                    {
-                        Debug.LogWarning("TourManager not found in scene.");
-                    }
 
                 }
-                else
-                {
-                    Debug.LogWarning("Resolve succeeded but result.Anchor was null (no anchor transform to parent to).");
-                }
 
-                // ✅ Call after setup so we don't accidentally advance POI before we read it
+                // Call after setup so we don't accidentally advance POI before we read it
                 OnAnchorResolvedFinished(true, cloudId);
             }
             else
             {
                 OnAnchorResolvedFinished(false, cloudId, result.CloudAnchorState.ToString());
             }
-
-
 
             // Allow future resolves while staying in ARView
             _resolveResults.Clear();
@@ -700,31 +694,19 @@ private void ResolvingCloudAnchors()
 
         public void SkipAudioAheadFiveSeconds()
         {
-            if (_audio != null && _audio.isPlaying)
+            if (_audio != null)
             {
                 float newTime = _audio.time + 5f;
                 _audio.time = Mathf.Min(newTime, _audio.clip.length);
-            }
-            else if(_audio != null && !_audio.isPlaying){
-                _audio.Play();
-                float newTime = _audio.time + 5f;
-                _audio.time = Mathf.Min(newTime, _audio.clip.length);
-                _audio.Pause();
             }
         }
 
         public void SkipAudioBackFiveSeconds()
         {
-            if (_audio != null && _audio.isPlaying)
+            if (_audio != null)
             {
                 float newTime = _audio.time - 5f;
                 _audio.time = Mathf.Max(newTime, 0f);
-            }
-            else if(_audio != null && !_audio.isPlaying){
-                _audio.Play();
-                float newTime = _audio.time - 5f;
-                _audio.time = Mathf.Max(newTime, 0f);
-                _audio.Pause();
             }
         }
 
@@ -775,7 +757,6 @@ private void ResolvingCloudAnchors()
             {
                 InstructionText.text = "Resolve success!";
 
-                // ✅ Modern Unity API
                 var tour = FindFirstObjectByType<TourManager>();
                 if (tour != null)
                 {

@@ -36,16 +36,14 @@ public class TourManager : MonoBehaviour
 
     private void BuildTourDropdown()
     {
-        if (TourDropdown == null)
-        {
-            return;
-        }
+        if (TourDropdown == null) return;
 
         TourDropdown.ClearOptions();
         var options = new List<TMP_Dropdown.OptionData>();
 
-        foreach (var t in Tours)
-            options.Add(new TMP_Dropdown.OptionData(t ? t.tourName : "Please select a tour"));
+        // Fill tour dropdown with the options
+        foreach (var tour in Tours)
+            options.Add(new TMP_Dropdown.OptionData(tour ? tour.tourName : "Please select a tour"));
 
         TourDropdown.AddOptions(options);
     }
@@ -67,23 +65,22 @@ public class TourManager : MonoBehaviour
             return;
         }
 
+        // Set selected tour as the active tour and start tour at first POI
         _activeTour = Tours[index];
         _poiIndex = -1;
     }
 
-    public PointOfInterest CurrentPOI
+    public PointOfInterest GetCurrentPOI()
     {
-        get
-        {
-            if (_activeTour == null) return null;
-            if (_activeTour.pois == null) return null;
-            if (_poiIndex < 0 || _poiIndex >= _activeTour.pois.Count) return null;
-            return _activeTour.pois[_poiIndex];
-        }
+        if (_activeTour == null) return null;
+        if (_activeTour.pois == null) return null;
+        if (_poiIndex < 0 || _poiIndex >= _activeTour.pois.Count) return null;
+
+        return _activeTour.pois[_poiIndex];
     }
 
     
-    // Finds the POI in the active tour that matches the given cloud anchor id.
+    // Finds the POI in the active tour that matches the given cloud anchor id
     public PointOfInterest GetPOIByCloudId(string cloudId)
     {
         if (_activeTour == null || _activeTour.pois == null) return null;
@@ -107,26 +104,20 @@ public class TourManager : MonoBehaviour
 
     public void OnNextPressed()
     {
-        if (_activeTour == null)
-        {
-            return;
-        }
+        if (_activeTour == null) return;
 
         ResolveNextPOI();
     }
 
     public void OnPreviousPressed()
     {
-        if (_activeTour == null)
-        {
-            return;
-        }
+        if (_activeTour == null) return;
 
         ResolvePreviousPOI();
     }
 
-    // Called by ARViewManager when a cloud anchor successfully resolves.
-    // Updates the current POI index to the resolved POI.
+    // Called by ARViewManager when a cloud anchor successfully resolves
+    // Updates the current POI index to the resolved POI
     public void OnPOIResolved(string resolvedCloudId)
     {
         if (_activeTour == null || _activeTour.pois == null)
@@ -137,6 +128,7 @@ public class TourManager : MonoBehaviour
 
         resolvedCloudId = resolvedCloudId.Trim();
 
+        // Sets which poi was resolved
         for (int i = 0; i < _activeTour.pois.Count; i++)
         {
             var poi = _activeTour.pois[i];
@@ -200,7 +192,7 @@ public class TourManager : MonoBehaviour
 
     public void ResolveCurrentPOI()
     {
-        var poi = CurrentPOI;
+        var poi = GetCurrentPOI();
         if (poi == null)
         {
             return;
@@ -222,6 +214,7 @@ public class TourManager : MonoBehaviour
             return;
         }
 
+        // Send id to controller in queue to begin resolving
         Controller.Mode = PersistentCloudAnchorsController.ApplicationMode.Resolving;
 
         Controller.ResolvingSet.Clear();

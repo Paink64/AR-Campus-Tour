@@ -19,10 +19,7 @@ public class FullScreenPOIView : MonoBehaviour
 
     public void SetData(PointOfInterest poi)
     {
-        if (poi == null)
-        {
-            return;
-        }
+        if (poi == null) return;
 
         // Text
         if (titleText != null)
@@ -51,30 +48,13 @@ public class FullScreenPOIView : MonoBehaviour
         if (_timer >= secondsPerImage)
         {
             _timer = 0f;
-            NextImage();
+            UpdateImage();
         }
-    }
-
-    private void NextImage()
-    {
-        if (_gallery == null || _gallery.Length == 0) return;
-
-        int attempts = 0;
-
-        do
-        {
-            _currentIndex = (_currentIndex + 1) % _gallery.Length;
-            attempts++;
-        }
-        while (_gallery[_currentIndex] == null && attempts < _gallery.Length);
-
-        UpdateImage();
     }
 
     private void UpdateImage()
     {
-        if (galleryImage == null)
-            return;
+        if (galleryImage == null) return;
 
         if (_gallery == null || _gallery.Length == 0)
         {
@@ -82,13 +62,14 @@ public class FullScreenPOIView : MonoBehaviour
             return;
         }
 
-        // Find first valid image
+        // Find next valid image and continues cycle
         int attempts = 0;
-        while (_gallery[_currentIndex] == null && attempts < _gallery.Length)
+        do
         {
             _currentIndex = (_currentIndex + 1) % _gallery.Length;
             attempts++;
         }
+        while (_gallery[_currentIndex] == null && attempts < _gallery.Length);
 
         if (_gallery[_currentIndex] != null)
         {

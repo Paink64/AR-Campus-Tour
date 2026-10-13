@@ -20,9 +20,6 @@ public class PointOfInterest : ScriptableObject
     public double latitude;
     public double longitude;
 
-    [Tooltip("Meters considered 'arrived' for the arrival event")]
-    public float triggerRadiusMeters = 30f;
-
     [Header("Cloud Anchor")]
     [Tooltip("Set this after hosting Anchor")]
     public string cloudAnchorId;
