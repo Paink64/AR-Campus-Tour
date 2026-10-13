@@ -21,3 +21,10 @@ Notes on things I may want to add or change<br>
 -Skip ahead/behind buttons don't work while paused<br>
 -Arrow is gittery<br>
 -Accuracy of the arrow may not work with smaller spaces, but will be fine for guiding around a campus as Latitude has ~1.11 m and Longitude had ~11.1 m of accuracy
+
+# Example of new fixes
+
+[Fix Test](https://youtube.com/shorts/hLnVMyMtoQY)
+
+New UI home screen
+Fixed audio controls while full screen, skip ahead/behind buttons while paused, and smoothed the guide arrow.
