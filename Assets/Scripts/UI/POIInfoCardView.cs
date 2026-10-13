@@ -43,6 +43,21 @@ public class POIInfoCardView : MonoBehaviour
         UpdateImage();
     }
 
+    public void SetFullScreenData(PointOfInterest poi)
+    {
+        if (poi == null) return;
+
+        // --- Text ---
+        if (titleText != null) titleText.text = poi.title ?? "";
+
+        if (bodyText != null) bodyText.text = poi.description ?? "";
+
+        // --- Gallery ---
+        _gallery = poi.gallery;
+
+        UpdateImage();
+    }
+
     private void Update()
     {
         if (!autoplay) return;

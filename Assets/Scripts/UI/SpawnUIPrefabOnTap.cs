@@ -32,10 +32,10 @@ public class SpawnUIPrefabOnTap : MonoBehaviour
     private void PushData()
     {
         // Set the data for the full screen
-        var view = _spawned.GetComponentInChildren<FullScreenPOIView>(true);
+        var view = _spawned.GetComponentInChildren<POIInfoCardView>(true);
         if (view != null)
         {
-            view.SetData(poi);
+            view.SetFullScreenData(poi);
         }
     }
 }
